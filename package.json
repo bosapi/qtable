@@ -1,5 +1,5 @@
 {
-	"name": "qtable",
+	"name": "@bosapi/qtable",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/bosapi/qtable"

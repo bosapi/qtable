@@ -1,0 +1,35 @@
+name: Publish BosAPI QTable Library to NPM
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  publish:
+    name: Publishing to NPM
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the Repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GIT_TOKEN }}
+      - name: Automatic Tagging
+        id: meta
+        run: |
+          bash ./scripts/git_tag.sh -v patch
+      - name: Setup package
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: 'https://registry.npmjs.org'
+      - name: Installing package 
+        run: npm install
+      - name: Publish to NPM
+        run: |
+          git config user.email "admin@bosapi.com" 
+          git config user.name "bosapi"
+          npm version --no-git-tag-version ${{ steps.meta.outputs.tags }}
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
