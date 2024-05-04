@@ -21,11 +21,7 @@
 	export let isLoading = false;
 	export let bodyOnly = false;
 	export let toolbarOptions: any = {};
-	export let auth: any = {
-		create: $authUser?.role === 'Dosen' || $authUser?.role === 'Admin',
-		update: $authUser?.role === 'Dosen' || $authUser?.role === 'Admin',
-		delete: $authUser?.role === 'Dosen' || $authUser?.role === 'Admin'
-	};
+	export let auth: any = {};
 
 	function getData() {
 		if (!data) return writable([]);
