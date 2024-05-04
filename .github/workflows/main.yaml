@@ -21,9 +21,9 @@ jobs:
       - name: Setup package
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: '20'
           registry-url: 'https://registry.npmjs.org'
-      - name: Installing package 
+      - name: Installing package
         run: npm install
       - name: Publish to NPM
         run: |

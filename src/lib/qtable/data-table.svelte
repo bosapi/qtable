@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { readable, type Readable } from 'svelte/store';
+	import { readable, writable, type Readable } from 'svelte/store';
 	import { Render, Subscribe, createTable } from 'svelte-headless-table';
 	import * as Table from '$lib/components/ui/table';
 	import {
@@ -27,7 +27,14 @@
 		delete: $authUser?.role === 'Dosen' || $authUser?.role === 'Admin'
 	};
 
-	const table = createTable(data, {
+	function getData() {
+		if (!data) return writable([]);
+		if (!$data) return writable([]);
+		if ($data.length === 0) return writable([]);
+		return data;
+	}
+
+	const table = createTable(getData(), {
 		select: addSelectedRows(),
 		sort: addSortBy({
 			toggleOrder: ['asc', 'desc']
