@@ -9,5 +9,5 @@
 		<Loader class="mr-3 animate-spin" /> Please wait...
 	</div>
 {:else}
-	<div class="my-3 w-full text-center text-muted-foreground">Data is not found...</div>
+	<div class="my-3 w-full text-center text-muted-foreground">Data not found.</div>
 {/if}
