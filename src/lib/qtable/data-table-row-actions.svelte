@@ -16,7 +16,12 @@
 
 	function onDelete() {
 		if (confirm('Apakah Anda yakin?')) {
-			actionTable.set({ id: orow?.id, action: 'remove', name: name });
+			actionTable.set({
+				id: orow?.id,
+				action: 'remove',
+				name: name,
+				data: editableOnly(schema, orow)
+			});
 		}
 	}
 
