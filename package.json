@@ -55,7 +55,7 @@
 	"types": "./dist/index.d.ts",
 	"type": "module",
 	"dependencies": {
-		"@bosapi/qform": "^0.0.2",
+		"@bosapi/qform": "^0.0.3",
 		"cmdk-sv": "^0.0.17",
 		"lucide-svelte": "^0.372.0",
 		"svelte-headless-table": "^0.18.2"
