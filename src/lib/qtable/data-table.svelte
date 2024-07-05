@@ -14,7 +14,7 @@
 	import { generateColumns } from './helper.js';
 	import Loading from '$lib/components/base/loading.svelte';
 	import { createEventDispatcher, onMount } from 'svelte';
-	import { authUser } from '$lib/store.js';
+	// import { authUser } from '$lib/store.js';
 
 	export let data: Readable<any[]> = readable([]);
 	export let schema: any;
@@ -22,6 +22,7 @@
 	export let bodyOnly = false;
 	export let toolbarOptions: any = {};
 	export let auth: any = {};
+	export let actionPosition: string;
 
 	function getData() {
 		if (!data) return writable([]);
@@ -45,7 +46,7 @@
 		hide: addHiddenColumns()
 	});
 
-	const columns = generateColumns(table, schema, auth);
+	const columns = generateColumns(table, schema, auth, actionPosition);
 	const tableModel = table.createViewModel(columns);
 	const { headerRows, pageRows, tableAttrs, tableBodyAttrs } = tableModel;
 

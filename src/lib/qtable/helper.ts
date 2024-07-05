@@ -3,13 +3,38 @@ import { createRender } from 'svelte-headless-table';
 import { get } from 'svelte/store';
 import * as CellType from '.';
 
+function generateActionTable(table: any, schema: any, auth: any) {
+	return table.display({
+		id: 'actions',
+		header: () => {
+			return '';
+		},
+		cell: ({ row }: any) => {
+			if (row.isData() && row.original) {
+				return createRender(CellType['DataTableRowActions'], {
+					orow: row.original,
+					name: schema.name,
+					auth,
+					schema
+				});
+			}
+			return '';
+		},
+		plugins: {
+			sort: {
+				disable: true
+			}
+		}
+	});
+}
+
 export const uid = (length: number = 16) => {
 	let n = Math.ceil(Math.random() * 10 ** length).toString(36);
 	n = n.replace('.', '');
 	return n.toUpperCase();
 };
 
-export const generateColumns = (table: any, schema: Schema, auth: any = {}) => {
+export const generateColumns = (table: any, schema: Schema, auth: any = {}, actionPosition: string = 'right') => {
 	const columns: any = [];
 	const schemaProp = schema.properties;
 
@@ -40,6 +65,10 @@ export const generateColumns = (table: any, schema: Schema, auth: any = {}) => {
 			}
 		})
 	);
+
+	if (actionPosition === 'left') {
+		columns.push(generateActionTable(table, schema, auth));
+	}
 
 	/**
 	 * Start here we will generate the rest of columns
@@ -99,31 +128,11 @@ export const generateColumns = (table: any, schema: Schema, auth: any = {}) => {
 			})
 		);
 	}
-	// add action to the end;
-	columns.push(
-		table.display({
-			id: 'actions',
-			header: () => {
-				return '';
-			},
-			cell: ({ row }: any) => {
-				if (row.isData() && row.original) {
-					return createRender(CellType['DataTableRowActions'], {
-						orow: row.original,
-						name: schema.name,
-						auth,
-						schema
-					});
-				}
-				return '';
-			},
-			plugins: {
-				sort: {
-					disable: true
-				}
-			}
-		})
-	);
+
+	if (actionPosition !== 'left') {
+		// add action to the end;
+		columns.push(generateActionTable(table, schema, auth));
+	}
 
 	return table.createColumns(columns);
 };

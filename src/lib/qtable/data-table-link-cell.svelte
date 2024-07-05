@@ -31,6 +31,7 @@
 		href={$navigating ? null : generateHref()}
 		title={value}
 		class="text-blue-600 hover:text-blue-400 hover:underline dark:text-blue-300"
+		target={params?.target || '_self'}
 	>
 		<div class="flex space-x-2">
 			<span style={width ? `width: ${width}` : 'auto'} class="truncate font-medium">
