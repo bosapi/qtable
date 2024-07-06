@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Select as SelectPrimitive } from 'bits-ui';
 	import { cn } from '$lib/utils.js';
-	import { DotSquare } from 'lucide-svelte';
+	import { ChevronsUpDownIcon } from 'lucide-svelte';
 
 	type $$Props = SelectPrimitive.TriggerProps;
 	type $$Events = SelectPrimitive.TriggerEvents;
@@ -19,6 +19,6 @@
 >
 	<slot />
 	<div>
-		<DotSquare class="h-4 w-4 opacity-50" />
+		<ChevronsUpDownIcon class="h-4 w-4 opacity-50" />
 	</div>
 </SelectPrimitive.Trigger>

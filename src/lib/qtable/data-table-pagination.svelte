@@ -5,14 +5,29 @@
 	import type { AnyPlugins } from 'svelte-headless-table/lib/types/TablePlugin';
 	import type { TableViewModel } from 'svelte-headless-table';
 	import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-svelte';
+	import { createEventDispatcher } from 'svelte';
 
 	export let tableModel: TableViewModel<any, AnyPlugins>;
 
-	const { pageRows, pluginStates, rows } = tableModel;
+	const { pluginStates, rows } = tableModel;
 
-	const { hasNextPage, hasPreviousPage, pageIndex, pageCount, pageSize } = pluginStates.page;
+	const { hasNextPage, hasPreviousPage, pageIndex, pageCount, pageSize, serverItemCount } =
+		pluginStates.page;
 
 	const { selectedDataIds } = pluginStates.select;
+
+	const dispatch = createEventDispatcher();
+
+	function updatePageIndex(index: number) {
+		dispatch('updatePageIndex', index);
+	}
+
+	function updatePageSize(size: number) {
+		dispatch('updatePageSize', size);
+	}
+
+	$: updatePageIndex($pageIndex);
+	$: updatePageSize($pageSize);
 </script>
 
 <div class="flex items-center justify-between px-2">
@@ -75,7 +90,7 @@
 				variant="outline"
 				class="hidden h-8 w-8 p-0 lg:flex"
 				disabled={!$hasNextPage}
-				on:click={() => ($pageIndex = Math.ceil($rows.length / $pageRows.length) - 1)}
+				on:click={() => ($pageIndex = $pageCount - 1)}
 			>
 				<span class="sr-only">Go to last page</span>
 				<ChevronsRight size={15} />

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { readable, writable, type Readable } from 'svelte/store';
+	import { get, readable, writable, type Readable, type Writable } from 'svelte/store';
 	import { Render, Subscribe, createTable } from 'svelte-headless-table';
 	import * as Table from '$lib/components/ui/table';
 	import {
@@ -23,7 +23,13 @@
 	export let toolbarOptions: any = {};
 	export let hideToolbar = false;
 	export let auth: any = {};
-	export let actionPosition: string;
+	export let actionPosition: string = 'right';
+	export let serverSide: boolean = true;
+	export let serverItemCount: Writable<number> = writable(10);
+	export let keyword: string = '';
+
+	let isFiltering = false;
+	let timeoutIndex: number;
 
 	function getData() {
 		if (!data) return writable([]);
@@ -32,15 +38,40 @@
 		return data;
 	}
 
+	function resetPageIndex() {
+		if (!tableModel) return;
+		const { pageIndex } = tableModel.pluginStates.page;
+		const pIndex = get(pageIndex);
+		if (pIndex > 0) {
+			pageIndex.set(0);
+		}
+	}
+
+	function filterToServer(filterValue: string) {
+		isFiltering = true;
+		keyword = filterValue;
+		clearTimeout(timeoutIndex);
+		resetPageIndex();
+		timeoutIndex = setTimeout(() => {
+			isFiltering = false;
+			updateFilter();
+		}, 1000);
+		return true;
+	}
+
 	const table = createTable(getData(), {
 		select: addSelectedRows(),
 		sort: addSortBy({
 			toggleOrder: ['asc', 'desc']
 		}),
-		page: addPagination(),
+		page: addPagination({
+			serverSide,
+			serverItemCount
+		}),
 		filter: addTableFilter({
+			serverSide,
 			fn: ({ filterValue, value }) => {
-				return value.toLowerCase().includes(filterValue.toLowerCase());
+				return filterToServer(filterValue);
 			}
 		}),
 		colFilter: addColumnFilters(),
@@ -65,6 +96,32 @@
 
 	function onLoading({ detail }: any) {
 		dispatch('loading', detail);
+	}
+
+	function updatePageIndex({ detail }: any) {
+		if (isFiltering) return;
+		onChange();
+	}
+
+	function updatePageSize({ detail }: any) {
+		onChange();
+	}
+
+	function updateFilter() {
+		onChange();
+	}
+
+	function onChange() {
+		const { pageSize, pageIndex } = tableModel.pluginStates.page;
+		const limit = get(pageSize);
+		const pIndex = get(pageIndex);
+		const offset = pIndex > 0 ? limit * pIndex : 0;
+		const detail = {
+			keyword,
+			limit,
+			offset
+		};
+		dispatch('change', detail);
 	}
 </script>
 
@@ -130,6 +187,10 @@
 		</div>
 	{/if}
 	{#if !bodyOnly}
-		<DataTablePagination {tableModel} />
+		<DataTablePagination
+			{tableModel}
+			on:updatePageIndex={updatePageIndex}
+			on:updatePageSize={updatePageSize}
+		/>
 	{/if}
 </div>
