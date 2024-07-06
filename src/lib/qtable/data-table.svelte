@@ -21,6 +21,7 @@
 	export let isLoading = false;
 	export let bodyOnly = false;
 	export let toolbarOptions: any = {};
+	export let hideToolbar = false;
 	export let auth: any = {};
 	export let actionPosition: string;
 
@@ -68,7 +69,7 @@
 </script>
 
 <div class="space-y-4">
-	{#if !bodyOnly}
+	{#if !bodyOnly && !hideToolbar}
 		<DataTableToolbar
 			{tableModel}
 			{schema}
