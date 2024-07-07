@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { QTable } from '$lib/index.js';
-	import { writable } from 'svelte/store';
+	import { onMount } from 'svelte';
+	import { writable, type Writable } from 'svelte/store';
 	const schema = {
 		name: 'identity',
 		properties: {
@@ -61,7 +62,9 @@
 		}
 	};
 
-	const data = writable([
+	let dataTable: Writable<any[]> = writable([]);
+
+	const data = [
 		{
 			id: 1,
 			user: 'User 1',
@@ -122,11 +125,32 @@
 			user: 'User 12',
 			is_active: true
 		}
-	]);
+	];
 
 	function onChange({ detail }: any) {
 		console.log('onChange', detail);
 	}
+
+	function reEntry() {
+		dataTable.set([]);
+		setTimeout(() => {
+			$dataTable = data;
+		}, 1000);
+	}
+
+	onMount(() => {
+		dataTable.set(data);
+	});
 </script>
 
-<QTable {data} {schema} hideToolbar={false} serverItemCount={writable(100)} on:change={onChange} />
+<!-- {JSON.stringify($dataTable)} -->
+
+<QTable
+	data={dataTable}
+	{schema}
+	hideToolbar={false}
+	serverItemCount={writable(100)}
+	on:change={onChange}
+/>
+
+<button on:click={reEntry}>Re-entry</button>

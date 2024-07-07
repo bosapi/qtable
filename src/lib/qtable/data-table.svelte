@@ -16,7 +16,7 @@
 	import { createEventDispatcher, onMount } from 'svelte';
 	// import { authUser } from '$lib/store.js';
 
-	export let data: Readable<any[]> = readable([]);
+	export let data: Writable<any[]> = writable([]);
 	export let schema: any;
 	export let isLoading = false;
 	export let bodyOnly = false;
@@ -31,12 +31,15 @@
 	let isFiltering = false;
 	let timeoutIndex: number;
 
-	function getData() {
-		if (!data) return writable([]);
-		if (!$data) return writable([]);
-		if ($data.length === 0) return writable([]);
-		return data;
-	}
+	// TODO: Fix this bug
+	let lastKeyword = '';
+
+	// function getData() {
+	// 	if (!data) return writable([]);
+	// 	if (!$data) return writable([]);
+	// 	if ($data.length === 0) return writable([]);
+	// 	return data;
+	// }
 
 	function resetPageIndex() {
 		if (!tableModel) return;
@@ -59,7 +62,7 @@
 		return true;
 	}
 
-	const table = createTable(getData(), {
+	const table = createTable(data, {
 		select: addSelectedRows(),
 		sort: addSortBy({
 			toggleOrder: ['asc', 'desc']
@@ -108,6 +111,8 @@
 	}
 
 	function updateFilter() {
+		if (lastKeyword == keyword) return;
+		lastKeyword = keyword;
 		onChange();
 	}
 
