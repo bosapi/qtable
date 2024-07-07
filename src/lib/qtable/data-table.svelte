@@ -134,7 +134,6 @@
 	}
 </script>
 
-table initialPageIndex = {initialPageIndex}
 <div class="space-y-4">
 	{#if !bodyOnly && !hideToolbar}
 		<DataTableToolbar

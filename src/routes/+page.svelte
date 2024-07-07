@@ -148,7 +148,6 @@
 </script>
 
 <!-- {JSON.stringify($dataTable)} -->
-initialPageIndex = {initialPageIndex}
 <QTable
 	data={dataTable}
 	{schema}
