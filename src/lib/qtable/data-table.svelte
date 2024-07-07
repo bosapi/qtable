@@ -27,6 +27,8 @@
 	export let serverSide: boolean = true;
 	export let serverItemCount: Writable<number> = writable(10);
 	export let keyword: string = '';
+	export let initialPageIndex: number = 0;
+	export let initialPageSize: number = 10;
 
 	let isFiltering = false;
 	let timeoutIndex: number;
@@ -54,7 +56,6 @@
 		isFiltering = true;
 		keyword = filterValue;
 		clearTimeout(timeoutIndex);
-		resetPageIndex();
 		timeoutIndex = setTimeout(() => {
 			isFiltering = false;
 			updateFilter();
@@ -69,7 +70,9 @@
 		}),
 		page: addPagination({
 			serverSide,
-			serverItemCount
+			serverItemCount,
+			initialPageIndex,
+			initialPageSize
 		}),
 		filter: addTableFilter({
 			serverSide,
@@ -113,23 +116,25 @@
 	function updateFilter() {
 		if (lastKeyword == keyword) return;
 		lastKeyword = keyword;
+		resetPageIndex();
 		onChange();
 	}
 
 	function onChange() {
 		const { pageSize, pageIndex } = tableModel.pluginStates.page;
-		const limit = get(pageSize);
-		const pIndex = get(pageIndex);
-		const offset = pIndex > 0 ? limit * pIndex : 0;
+		const _pageSize = get(pageSize);
+		const _pageIndex = get(pageIndex);
+		// const offset = pIndex > 0 ? limit * pIndex : 0;
 		const detail = {
 			keyword,
-			limit,
-			offset
+			pageSize: _pageSize,
+			pageIndex: _pageIndex
 		};
 		dispatch('change', detail);
 	}
 </script>
 
+table initialPageIndex = {initialPageIndex}
 <div class="space-y-4">
 	{#if !bodyOnly && !hideToolbar}
 		<DataTableToolbar

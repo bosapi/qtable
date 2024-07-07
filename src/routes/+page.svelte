@@ -114,27 +114,31 @@
 			id: 10,
 			user: 'User 10',
 			is_active: true
-		},
-		{
-			id: 11,
-			user: 'User 11',
-			is_active: true
-		},
-		{
-			id: 12,
-			user: 'User 12',
-			is_active: true
 		}
+		// {
+		// 	id: 11,
+		// 	user: 'User 11',
+		// 	is_active: true
+		// },
+		// {
+		// 	id: 12,
+		// 	user: 'User 12',
+		// 	is_active: true
+		// }
 	];
+
+	let initialPageIndex = 0;
 
 	function onChange({ detail }: any) {
 		console.log('onChange', detail);
+		reEntry();
 	}
 
 	function reEntry() {
 		dataTable.set([]);
 		setTimeout(() => {
 			$dataTable = data;
+			initialPageIndex = initialPageIndex + 1;
 		}, 1000);
 	}
 
@@ -144,12 +148,13 @@
 </script>
 
 <!-- {JSON.stringify($dataTable)} -->
-
+initialPageIndex = {initialPageIndex}
 <QTable
 	data={dataTable}
 	{schema}
 	hideToolbar={false}
 	serverItemCount={writable(100)}
+	{initialPageIndex}
 	on:change={onChange}
 />
 
