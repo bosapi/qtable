@@ -40,7 +40,8 @@
 		}
 	}
 
-	function editableOnly(schema: any, data: any) {
+	function editableOnly(schema: any, odata: any) {
+		const data = JSON.parse(JSON.stringify(odata));
 		const props = schema.properties;
 		// uneditable: id, form show false, form options editable false
 		for (const key in data) {
