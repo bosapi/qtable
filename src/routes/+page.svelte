@@ -154,6 +154,7 @@
 	hideToolbar={false}
 	serverItemCount={writable(100)}
 	{initialPageIndex}
+	useActionButton={true}
 	on:change={onChange}
 />
 

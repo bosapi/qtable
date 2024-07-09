@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/button';
+	import Button from '$lib/components/ui/button/button.svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import { MoreHorizontal } from 'lucide-svelte';
+	import { MoreHorizontal, Pencil, Trash } from 'lucide-svelte';
 	import { actionTable } from '$lib/store';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { QForm } from '@bosapi/qform';
@@ -11,6 +11,7 @@
 	export let auth: any = {};
 	export let isLoading: boolean = false;
 	export let schema: any;
+	export let useActionButton: boolean = false;
 
 	let open = false;
 
@@ -63,23 +64,34 @@
 	}
 </script>
 
-<DropdownMenu.Root>
-	<DropdownMenu.Trigger asChild let:builder>
-		<Button
-			variant="ghost"
-			builders={[builder]}
-			class="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+{#if useActionButton}
+	<div class="flex items-center justify-center gap-2">
+		<Button on:click={onEdit} disabled={!auth.update} size="icon" variant="secondary"
+			><Pencil /></Button
 		>
-			<MoreHorizontal class="h-4 w-4" />
-			<span class="sr-only">Open menu</span>
-		</Button>
-	</DropdownMenu.Trigger>
-	<DropdownMenu.Content class="w-[160px]">
-		<!-- <DropdownMenu.Separator /> -->
-		<DropdownMenu.Item on:click={onEdit} disabled={!auth.update}>Edit</DropdownMenu.Item>
-		<DropdownMenu.Item on:click={onDelete} disabled={!auth.delete}>Delete</DropdownMenu.Item>
-	</DropdownMenu.Content>
-</DropdownMenu.Root>
+		<Button on:click={onDelete} disabled={!auth.delete} size="icon" variant="destructive"
+			><Trash /></Button
+		>
+	</div>
+{:else}
+	<DropdownMenu.Root>
+		<DropdownMenu.Trigger asChild let:builder>
+			<Button
+				variant="ghost"
+				builders={[builder]}
+				class="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+			>
+				<MoreHorizontal class="h-4 w-4" />
+				<span class="sr-only">Open menu</span>
+			</Button>
+		</DropdownMenu.Trigger>
+		<DropdownMenu.Content class="w-[160px]">
+			<!-- <DropdownMenu.Separator /> -->
+			<DropdownMenu.Item on:click={onEdit} disabled={!auth.update}>Edit</DropdownMenu.Item>
+			<DropdownMenu.Item on:click={onDelete} disabled={!auth.delete}>Delete</DropdownMenu.Item>
+		</DropdownMenu.Content>
+	</DropdownMenu.Root>
+{/if}
 
 <Dialog.Root bind:open closeOnEscape={true} closeOnOutsideClick={true}>
 	<Dialog.Content class="max-h-[95%] max-w-[510px] overflow-auto">

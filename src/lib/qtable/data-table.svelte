@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { get, readable, writable, type Readable, type Writable } from 'svelte/store';
+	import { get, writable, type Writable } from 'svelte/store';
 	import { Render, Subscribe, createTable } from 'svelte-headless-table';
 	import * as Table from '$lib/components/ui/table';
 	import {
@@ -29,6 +29,7 @@
 	export let keyword: string = '';
 	export let initialPageIndex: number = 0;
 	export let initialPageSize: number = 10;
+	export let useActionButton: boolean = false;
 
 	let isFiltering = false;
 	let timeoutIndex: number;
@@ -84,7 +85,7 @@
 		hide: addHiddenColumns()
 	});
 
-	const columns = generateColumns(table, schema, auth, actionPosition);
+	const columns = generateColumns(table, schema, auth, actionPosition, useActionButton);
 	const tableModel = table.createViewModel(columns);
 	const { headerRows, pageRows, tableAttrs, tableBodyAttrs } = tableModel;
 
