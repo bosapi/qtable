@@ -12,6 +12,7 @@
 	export let isLoading: boolean = false;
 	export let schema: any;
 	export let useActionButton: boolean = false;
+	export let useExternalActionCallback: boolean = false;
 
 	let open = false;
 
@@ -27,7 +28,16 @@
 	}
 
 	function onEdit() {
-		open = true;
+		if (useExternalActionCallback) {
+			actionTable.set({
+				id: orow?.id,
+				action: 'edit',
+				name: name,
+				data: editableOnly(schema, orow)
+			});
+		} else {
+			open = true;
+		}
 	}
 
 	function editableOnly(schema: any, data: any) {

@@ -3,7 +3,7 @@ import { createRender } from 'svelte-headless-table';
 import { get } from 'svelte/store';
 import * as CellType from '.';
 
-function generateActionTable(table: any, schema: any, auth: any, useActionButton: boolean) {
+function generateActionTable(table: any, schema: any, auth: any, useActionButton: boolean, useExternalActionCallback: boolean) {
 	return table.display({
 		id: 'actions',
 		header: () => {
@@ -17,6 +17,7 @@ function generateActionTable(table: any, schema: any, auth: any, useActionButton
 					auth,
 					schema,
 					useActionButton,
+					useExternalActionCallback,
 				});
 			}
 			return '';
@@ -35,7 +36,7 @@ export const uid = (length: number = 16) => {
 	return n.toUpperCase();
 };
 
-export const generateColumns = (table: any, schema: Schema, auth: any = {}, actionPosition: string = 'right', useActionButton = false) => {
+export const generateColumns = (table: any, schema: Schema, auth: any = {}, actionPosition: string = 'right', useActionButton = false, useExternalActionCallback = false) => {
 	const columns: any = [];
 	const schemaProp = schema.properties;
 
@@ -68,7 +69,7 @@ export const generateColumns = (table: any, schema: Schema, auth: any = {}, acti
 	);
 
 	if (actionPosition === 'left') {
-		columns.push(generateActionTable(table, schema, auth, useActionButton));
+		columns.push(generateActionTable(table, schema, auth, useActionButton, useExternalActionCallback));
 	}
 
 	/**
@@ -132,7 +133,7 @@ export const generateColumns = (table: any, schema: Schema, auth: any = {}, acti
 
 	if (actionPosition !== 'left') {
 		// add action to the end;
-		columns.push(generateActionTable(table, schema, auth, useActionButton));
+		columns.push(generateActionTable(table, schema, auth, useActionButton, useExternalActionCallback));
 	}
 
 	return table.createColumns(columns);

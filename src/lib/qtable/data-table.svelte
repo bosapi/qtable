@@ -30,6 +30,7 @@
 	export let initialPageIndex: number = 0;
 	export let initialPageSize: number = 10;
 	export let useActionButton: boolean = false;
+	export let useExternalActionCallback: boolean = false;
 
 	let isFiltering = false;
 	let timeoutIndex: number;
@@ -85,7 +86,14 @@
 		hide: addHiddenColumns()
 	});
 
-	const columns = generateColumns(table, schema, auth, actionPosition, useActionButton);
+	const columns = generateColumns(
+		table,
+		schema,
+		auth,
+		actionPosition,
+		useActionButton,
+		useExternalActionCallback
+	);
 	const tableModel = table.createViewModel(columns);
 	const { headerRows, pageRows, tableAttrs, tableBodyAttrs } = tableModel;
 
@@ -145,6 +153,7 @@
 			{toolbarOptions}
 			{isLoading}
 			{auth}
+			{useExternalActionCallback}
 		/>
 	{/if}
 	<div class="rounded-md border">

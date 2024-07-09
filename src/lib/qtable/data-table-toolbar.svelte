@@ -21,6 +21,7 @@
 	export let toolbarOptions: any = {};
 	export let isLoading = false;
 	export let auth: any = {};
+	export let useExternalActionCallback: boolean = false;
 
 	const { pluginStates } = tableModel;
 	const {
@@ -105,6 +106,7 @@
 				on:submit={onSubmit}
 				on:loading={onLoading}
 				{isLoading}
+				{useExternalActionCallback}
 				disabled={!auth.create}
 			/>
 		{/if}

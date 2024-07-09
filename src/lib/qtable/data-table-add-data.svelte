@@ -8,11 +8,13 @@
 	import { Plus } from 'lucide-svelte';
 	import { createEventDispatcher } from 'svelte';
 	import { QForm } from '@bosapi/qform';
+	import { actionTable } from '$lib/store.js';
 
 	// export let tableModel: TableViewModel<any, AnyPlugins>;
 	export let schema: any;
 	export let isLoading: boolean = false;
 	export let disabled: boolean = false;
+	export let useExternalActionCallback: boolean = false;
 
 	let open: boolean = false;
 	let data: any = {};
@@ -40,6 +42,13 @@
 	function onLoading({ detail }: any) {
 		dispatch('loading', detail);
 	}
+
+	function onClickExternal() {
+		actionTable.set({
+			action: 'add',
+			data: data
+		});
+	}
 </script>
 
 <!-- <Button on:click={onClick} variant="default" size="sm" class="ml-auto h-8 flex">
@@ -47,20 +56,33 @@
 	<span class="ml-2 hidden sm:block">New</span>
 </Button> -->
 
-<Dialog.Root bind:open closeOnEscape={true} closeOnOutsideClick={true}>
-	<Dialog.Trigger disabled={isLoading || disabled}>
-		<Button variant="default" size="sm" class="ml-auto flex h-8" disabled={isLoading || disabled}>
-			<Plus class="h-4 w-4" />
-			<span class="ml-2 hidden sm:block">New</span>
-		</Button>
-	</Dialog.Trigger>
-	<Dialog.Content class="max-h-[95%] max-w-[510px] overflow-auto">
-		<Dialog.Header>
-			<Dialog.Title>Tambah Data</Dialog.Title>
-			<Dialog.Description>Jangan lupa klik tombol Simpan.</Dialog.Description>
-		</Dialog.Header>
-		<div class="max-w-[510px]">
-			<QForm {isLoading} {data} {schema} on:submit={onSubmit} on:loading={onLoading} />
-		</div>
-	</Dialog.Content>
-</Dialog.Root>
+{#if useExternalActionCallback}
+	<Button
+		on:click={onClickExternal}
+		variant="default"
+		size="sm"
+		class="ml-auto flex h-8"
+		disabled={isLoading || disabled}
+	>
+		<Plus class="h-4 w-4" />
+		<span class="ml-2 hidden sm:block">New</span>
+	</Button>
+{:else}
+	<Dialog.Root bind:open closeOnEscape={true} closeOnOutsideClick={true}>
+		<Dialog.Trigger disabled={isLoading || disabled}>
+			<Button variant="default" size="sm" class="ml-auto flex h-8" disabled={isLoading || disabled}>
+				<Plus class="h-4 w-4" />
+				<span class="ml-2 hidden sm:block">New</span>
+			</Button>
+		</Dialog.Trigger>
+		<Dialog.Content class="max-h-[95%] max-w-[510px] overflow-auto">
+			<Dialog.Header>
+				<Dialog.Title>Tambah Data</Dialog.Title>
+				<Dialog.Description>Jangan lupa klik tombol Simpan.</Dialog.Description>
+			</Dialog.Header>
+			<div class="max-w-[510px]">
+				<QForm {isLoading} {data} {schema} on:submit={onSubmit} on:loading={onLoading} />
+			</div>
+		</Dialog.Content>
+	</Dialog.Root>
+{/if}
