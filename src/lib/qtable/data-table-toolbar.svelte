@@ -90,9 +90,9 @@
 	<DataTableViewOptions {tableModel} />
 	<!-- <DataTableExportData {tableModel} /> -->
 	<!-- <DataTableImportData {tableModel} /> -->
-	<!-- {#if toolbarOptions.hideToolbar !== true} -->
-	{#if !toolbarOptions.hideAddButton}
-		{#if toolbarOptions.useCustomAddButton}
+	<!-- {#if toolbarOptions?.hideToolbar !== true} -->
+	{#if !toolbarOptions?.hideAddButton}
+		{#if toolbarOptions?.useCustomAddButton}
 			<DataTableCustomAddData
 				{schema}
 				on:submit={onSubmit}
