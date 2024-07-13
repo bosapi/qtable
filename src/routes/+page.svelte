@@ -130,7 +130,7 @@
 	let initialPageIndex = 0;
 
 	function onChange({ detail }: any) {
-		console.log('onChange', detail);
+		// console.log('onChange', detail);
 		reEntry();
 	}
 
@@ -154,6 +154,8 @@
 	hideToolbar={false}
 	serverItemCount={writable(100)}
 	{initialPageIndex}
+	serverSide={true}
+	initialPageSize={10}
 	useActionButton={true}
 	on:change={onChange}
 />
