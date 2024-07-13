@@ -107,8 +107,8 @@
 <Dialog.Root bind:open closeOnEscape={true} closeOnOutsideClick={true}>
 	<Dialog.Content class="max-h-[95%] max-w-[510px] overflow-auto">
 		<Dialog.Header>
-			<Dialog.Title>Ubah Data</Dialog.Title>
-			<Dialog.Description>Jangan lupa klik tombol Simpan.</Dialog.Description>
+			<Dialog.Title>Update Data</Dialog.Title>
+			<Dialog.Description>Click Save when you're done.</Dialog.Description>
 		</Dialog.Header>
 		<div class="max-w-[510px]">
 			<QForm
